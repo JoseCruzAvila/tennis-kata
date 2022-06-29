@@ -1,8 +1,7 @@
-
 public class TennisGame1 implements TennisGame {
     
-    private int m_score1 = 0;
-    private int m_score2 = 0;
+    private int mScore1 = 0;
+    private int mScore2 = 0;
     private String player1Name;
     private String player2Name;
 
@@ -12,65 +11,43 @@ public class TennisGame1 implements TennisGame {
     }
 
     public void wonPoint(String playerName) {
-        if (playerName == "player1")
-            m_score1 += 1;
+        if (playerName.equals("player1"))
+            mScore1 ++;
         else
-            m_score2 += 1;
+            mScore2 ++;
     }
 
     public String getScore() {
         String score = "";
-        int tempScore=0;
-        if (m_score1==m_score2)
-        {
-            switch (m_score1)
-            {
-                case 0:
-                        score = "Love-All";
-                    break;
-                case 1:
-                        score = "Fifteen-All";
-                    break;
-                case 2:
-                        score = "Thirty-All";
-                    break;
-                default:
-                        score = "Deuce";
-                    break;
-                
-            }
+        String player = player1Name;
+        score = scoreValue(mScore1) + "-" + scoreValue(mScore2);
+        
+        if (mScore1 == mScore2) {
+            score = mScore1 >= 3 ? "Deuce" : scoreValue(mScore1) + "-All";
         }
-        else if (m_score1>=4 || m_score2>=4)
-        {
-            int minusResult = m_score1-m_score2;
-            if (minusResult==1) score ="Advantage player1";
-            else if (minusResult ==-1) score ="Advantage player2";
-            else if (minusResult>=2) score = "Win for player1";
-            else score ="Win for player2";
+        
+        if ((mScore1>=4 || mScore2>=4) && mScore1 != mScore2 ) {
+            if (mScore2 > mScore1)
+                player = player2Name;
+
+            score = Math.abs(mScore1 - mScore2) <= 1 ? "Advantage " : "Win for ";
+            
+            score += player;
         }
-        else
-        {
-            for (int i=1; i<3; i++)
-            {
-                if (i==1) tempScore = m_score1;
-                else { score+="-"; tempScore = m_score2;}
-                switch(tempScore)
-                {
-                    case 0:
-                        score+="Love";
-                        break;
-                    case 1:
-                        score+="Fifteen";
-                        break;
-                    case 2:
-                        score+="Thirty";
-                        break;
-                    case 3:
-                        score+="Forty";
-                        break;
-                }
-            }
-        }
+
         return score;
+    }
+
+    private String scoreValue(int score) {
+        switch (score) {
+            case 1:
+                return "Fifteen";
+            case 2:
+                return "Thirty";
+            case 3:
+                return "Forty";
+            default:
+                return "Love";
+        }
     }
 }
